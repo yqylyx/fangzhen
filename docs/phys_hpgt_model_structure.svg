@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#4a5568"/>
+    </marker>
+    <marker id="arrowSoft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#7b8794"/>
+    </marker>
+    <style>
+      .title { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 28px; font-weight: 700; fill: #1f2937; }
+      .sectionTitle { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 20px; font-weight: 700; fill: #1f2937; }
+      .label { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 17px; font-weight: 600; fill: #1f2937; }
+      .small { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 15px; font-weight: 500; fill: #374151; }
+      .tiny { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 13px; font-weight: 500; fill: #4b5563; }
+      .panel { stroke-width: 2.2; rx: 18; ry: 18; }
+      .inner { stroke-width: 1.8; rx: 12; ry: 12; }
+      .conn { stroke: #4a5568; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .connSoft { stroke: #7b8794; stroke-width: 2.4; fill: none; marker-end: url(#arrowSoft); }
+      .connDash { stroke: #7b8794; stroke-width: 2.2; fill: none; stroke-dasharray: 8 7; marker-end: url(#arrowSoft); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="900" fill="#ffffff"/>
+  <text x="800" y="48" text-anchor="middle" class="title">Phys-HPGT 模型结构图</text>
+  <text x="800" y="76" text-anchor="middle" class="tiny">面向跨系统暂态稳定诊断的双模态层次化图时序网络</text>
+
+  <rect x="40" y="105" width="240" height="230" class="panel" fill="#eaf6fb" stroke="#2b7bb9"/>
+  <rect x="40" y="105" width="240" height="42" class="panel" fill="#d8edf8" stroke="#2b7bb9"/>
+  <text x="160" y="132" text-anchor="middle" class="sectionTitle">输入层</text>
+
+  <rect x="62" y="162" width="196" height="42" class="inner" fill="#ffffff" stroke="#6aaed6"/>
+  <text x="160" y="188" text-anchor="middle" class="label">电压序列 V</text>
+
+  <rect x="62" y="216" width="196" height="42" class="inner" fill="#ffffff" stroke="#6aaed6"/>
+  <text x="160" y="242" text-anchor="middle" class="label">功角序列 delta</text>
+
+  <rect x="62" y="270" width="196" height="46" class="inner" fill="#f7fcfe" stroke="#6aaed6"/>
+  <text x="160" y="297" text-anchor="middle" class="label">原始数据 + 掩码</text>
+  <text x="160" y="313" text-anchor="middle" class="tiny">Mask / Missing / Padding</text>
+
+  <rect x="320" y="105" width="380" height="230" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="320" y="105" width="380" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="510" y="132" text-anchor="middle" class="sectionTitle">阶段 1：局部时序切片</text>
+
+  <rect x="344" y="168" width="332" height="54" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="510" y="193" text-anchor="middle" class="label">Patch Embedding</text>
+  <text x="510" y="212" text-anchor="middle" class="small">按时间切片为局部 patches</text>
+
+  <rect x="344" y="244" width="332" height="58" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="510" y="269" text-anchor="middle" class="label">线性投影 + 模态专属 Embedding</text>
+  <text x="510" y="289" text-anchor="middle" class="tiny">Voltage / Angle modality tokens</text>
+
+  <rect x="740" y="105" width="380" height="230" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="740" y="105" width="380" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="930" y="132" text-anchor="middle" class="sectionTitle">阶段 2：通道内独立时序建模</text>
+
+  <rect x="764" y="168" width="332" height="56" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="930" y="193" text-anchor="middle" class="label">Temporal Encoder</text>
+  <text x="930" y="212" text-anchor="middle" class="small">位置编码 + Transformer / TCN</text>
+
+  <rect x="764" y="246" width="332" height="56" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="930" y="271" text-anchor="middle" class="label">通道级时序摘要</text>
+  <text x="930" y="290" text-anchor="middle" class="tiny">Voltage tokens / Angle tokens</text>
+
+  <rect x="1160" y="105" width="380" height="230" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="1160" y="105" width="380" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="1350" y="132" text-anchor="middle" class="sectionTitle">阶段 3：节点特征池化</text>
+
+  <rect x="1184" y="168" width="332" height="56" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="1350" y="193" text-anchor="middle" class="label">Node Pooling</text>
+  <text x="1350" y="212" text-anchor="middle" class="small">Masked Mean over temporal patches</text>
+
+  <rect x="1184" y="246" width="332" height="56" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="1350" y="271" text-anchor="middle" class="label">v_nodes / d_nodes</text>
+  <text x="1350" y="290" text-anchor="middle" class="tiny">电压节点与功角节点表示</text>
+
+  <rect x="250" y="455" width="350" height="235" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="250" y="455" width="350" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="425" y="482" text-anchor="middle" class="sectionTitle">阶段 4：图注意力信息交互</text>
+
+  <rect x="274" y="520" width="302" height="56" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="425" y="545" text-anchor="middle" class="label">all_nodes</text>
+  <text x="425" y="564" text-anchor="middle" class="tiny">拼接电压节点与功角节点</text>
+
+  <rect x="274" y="598" width="302" height="66" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="425" y="624" text-anchor="middle" class="label">Graph Attention</text>
+  <text x="425" y="644" text-anchor="middle" class="small">GraphAttentionBlock</text>
+
+  <rect x="645" y="455" width="435" height="235" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="645" y="455" width="435" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="862.5" y="482" text-anchor="middle" class="sectionTitle">阶段 5：自适应模态融合与频域增强</text>
+
+  <rect x="670" y="520" width="185" height="58" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="762.5" y="545" text-anchor="middle" class="label">全局池化</text>
+  <text x="762.5" y="564" text-anchor="middle" class="tiny">pooled_v / pooled_d / pooled_nodes</text>
+
+  <rect x="870" y="520" width="185" height="58" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="962.5" y="545" text-anchor="middle" class="label">频域低频特征</text>
+  <text x="962.5" y="564" text-anchor="middle" class="tiny">Spectral branch</text>
+
+  <rect x="670" y="602" width="385" height="62" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="862.5" y="627" text-anchor="middle" class="label">动态门控 Gate + 加权融合 Fused</text>
+  <text x="862.5" y="647" text-anchor="middle" class="tiny">生成中间决策状态 decision states</text>
+
+  <rect x="1125" y="455" width="360" height="235" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="1125" y="455" width="360" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="1305" y="482" text-anchor="middle" class="sectionTitle">阶段 6：动态早退与多出口预测</text>
+
+  <rect x="1148" y="520" width="314" height="56" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="1305" y="545" text-anchor="middle" class="label">决策状态 1 / 2 / N</text>
+  <text x="1305" y="564" text-anchor="middle" class="tiny">early-exit states</text>
+
+  <rect x="1148" y="598" width="314" height="66" class="inner" fill="#fdeff1" stroke="#d64545"/>
+  <text x="1305" y="624" text-anchor="middle" class="label">出口 1 / 出口 2 / 最终出口</text>
+  <text x="1305" y="644" text-anchor="middle" class="tiny">多出口分类与风险预测</text>
+
+  <rect x="1180" y="735" width="270" height="105" class="panel" fill="#fdeff1" stroke="#d64545"/>
+  <rect x="1180" y="735" width="270" height="38" class="panel" fill="#f9dde2" stroke="#d64545"/>
+  <text x="1315" y="760" text-anchor="middle" class="sectionTitle">输出</text>
+  <text x="1315" y="795" text-anchor="middle" class="label">类别概率 + 风险值</text>
+  <text x="1315" y="820" text-anchor="middle" class="label">对比特征 Embedding</text>
+
+  <path d="M280 220 L320 220" class="conn"/>
+  <path d="M700 220 L740 220" class="conn"/>
+  <path d="M1120 220 L1160 220" class="conn"/>
+  <path d="M1350 335 L1350 390 L425 390 L425 455" class="conn"/>
+  <path d="M600 572 L645 572" class="conn"/>
+  <path d="M1080 572 L1125 572" class="conn"/>
+  <path d="M1305 690 L1305 735" class="conn"/>
+
+  <path d="M510 222 L510 244" class="connSoft"/>
+  <path d="M930 224 L930 246" class="connSoft"/>
+  <path d="M1350 224 L1350 246" class="connSoft"/>
+  <path d="M425 576 L425 598" class="connSoft"/>
+  <path d="M762.5 578 L762.5 602" class="connSoft"/>
+  <path d="M962.5 578 L962.5 602" class="connSoft"/>
+  <path d="M1305 576 L1305 598" class="connSoft"/>
+
+  <path d="M160 293 C250 293, 260 193, 344 193" class="connDash"/>
+  <path d="M160 239 C255 239, 275 193, 344 193" class="connSoft"/>
+  <path d="M160 185 C255 185, 275 193, 344 193" class="connSoft"/>
+  <path d="M1350 302 C1350 360, 490 360, 490 520" class="connSoft"/>
+  <path d="M576 631 C615 631, 620 631, 670 631" class="connSoft"/>
+  <path d="M1055 633 C1095 633, 1100 548, 1148 548" class="connSoft"/>
+
+  <text x="790" y="378" text-anchor="middle" class="tiny">通道内建模后形成节点表示，再进入跨通道图交互</text>
+  <text x="865" y="706" text-anchor="middle" class="tiny">频域分支与门控融合共同构成多阶段 decision states</text>
+</svg>

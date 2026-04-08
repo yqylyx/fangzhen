@@ -1,0 +1,17 @@
+.DS_Store
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Local plotting/cache artifacts
+.matplotlib_cache/
+
+# Local dataset and job-index artifacts
+npy_jobs/
+data/
+datasets/
+
+# Local experiment outputs
+runs/
+tsa_boundary_detection/runs/

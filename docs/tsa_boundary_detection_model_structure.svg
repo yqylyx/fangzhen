@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#4a5568"/>
+    </marker>
+    <marker id="arrowSoft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#7b8794"/>
+    </marker>
+    <style>
+      .title { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 28px; font-weight: 700; fill: #1f2937; }
+      .sectionTitle { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 20px; font-weight: 700; fill: #1f2937; }
+      .label { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 17px; font-weight: 600; fill: #1f2937; }
+      .small { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 15px; font-weight: 500; fill: #374151; }
+      .tiny { font-family: "Arial","Helvetica","PingFang SC","Microsoft YaHei",sans-serif; font-size: 13px; font-weight: 500; fill: #4b5563; }
+      .panel { stroke-width: 2.2; rx: 18; ry: 18; }
+      .inner { stroke-width: 1.8; rx: 12; ry: 12; }
+      .note { stroke-width: 1.6; rx: 12; ry: 12; }
+      .conn { stroke: #4a5568; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .connSoft { stroke: #7b8794; stroke-width: 2.4; fill: none; marker-end: url(#arrowSoft); }
+      .connDash { stroke: #7b8794; stroke-width: 2.2; fill: none; stroke-dasharray: 8 7; marker-end: url(#arrowSoft); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="900" fill="#ffffff"/>
+
+  <text x="800" y="48" text-anchor="middle" class="title">Phys-HPGT Boundary Detection Variant</text>
+  <text x="800" y="76" text-anchor="middle" class="tiny">面向边界样本检测的双模态层次化图时序网络</text>
+
+  <!-- Input -->
+  <rect x="40" y="105" width="240" height="230" class="panel" fill="#eaf6fb" stroke="#2b7bb9"/>
+  <rect x="40" y="105" width="240" height="42" class="panel" fill="#d8edf8" stroke="#2b7bb9"/>
+  <text x="160" y="132" text-anchor="middle" class="sectionTitle">输入层</text>
+
+  <rect x="62" y="162" width="196" height="42" class="inner" fill="#ffffff" stroke="#6aaed6"/>
+  <text x="160" y="188" text-anchor="middle" class="label">电压序列 V</text>
+
+  <rect x="62" y="216" width="196" height="42" class="inner" fill="#ffffff" stroke="#6aaed6"/>
+  <text x="160" y="242" text-anchor="middle" class="label">功角序列 delta</text>
+
+  <rect x="62" y="270" width="196" height="46" class="inner" fill="#f7fcfe" stroke="#6aaed6"/>
+  <text x="160" y="297" text-anchor="middle" class="label">原始数据 + 掩码</text>
+  <text x="160" y="313" text-anchor="middle" class="tiny">Mask / Missing / Padding</text>
+
+  <!-- Stage 1 -->
+  <rect x="320" y="105" width="380" height="230" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="320" y="105" width="380" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="510" y="132" text-anchor="middle" class="sectionTitle">阶段 1：局部时序切片</text>
+
+  <rect x="344" y="168" width="332" height="54" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="510" y="193" text-anchor="middle" class="label">Patch Embedding</text>
+  <text x="510" y="212" text-anchor="middle" class="small">按时间切分为局部 patches</text>
+
+  <rect x="344" y="244" width="332" height="58" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="510" y="269" text-anchor="middle" class="label">线性投影 + 模态 Embedding</text>
+  <text x="510" y="289" text-anchor="middle" class="tiny">Voltage / Angle tokens</text>
+
+  <!-- Stage 2 -->
+  <rect x="740" y="105" width="380" height="230" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="740" y="105" width="380" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="930" y="132" text-anchor="middle" class="sectionTitle">阶段 2：通道内独立时序建模</text>
+
+  <rect x="764" y="168" width="332" height="56" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="930" y="193" text-anchor="middle" class="label">Temporal Encoder</text>
+  <text x="930" y="212" text-anchor="middle" class="small">位置编码 + Transformer / TCN</text>
+
+  <rect x="764" y="246" width="332" height="56" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="930" y="271" text-anchor="middle" class="label">通道级时序摘要</text>
+  <text x="930" y="290" text-anchor="middle" class="tiny">每个通道先独立完成时序编码</text>
+
+  <!-- Stage 3 -->
+  <rect x="1160" y="105" width="380" height="230" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="1160" y="105" width="380" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="1350" y="132" text-anchor="middle" class="sectionTitle">阶段 3：节点特征池化</text>
+
+  <rect x="1184" y="168" width="332" height="56" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="1350" y="193" text-anchor="middle" class="label">Node Pooling</text>
+  <text x="1350" y="212" text-anchor="middle" class="small">Masked Mean over temporal patches</text>
+
+  <rect x="1184" y="246" width="332" height="56" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="1350" y="271" text-anchor="middle" class="label">v_nodes / d_nodes</text>
+  <text x="1350" y="290" text-anchor="middle" class="tiny">电压节点与功角节点表示</text>
+
+  <!-- Stage 4 -->
+  <rect x="210" y="445" width="350" height="235" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="210" y="445" width="350" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="385" y="472" text-anchor="middle" class="sectionTitle">阶段 4：图注意力信息交互</text>
+
+  <rect x="234" y="510" width="302" height="56" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="385" y="535" text-anchor="middle" class="label">all_nodes</text>
+  <text x="385" y="554" text-anchor="middle" class="tiny">拼接电压节点与功角节点</text>
+
+  <rect x="234" y="588" width="302" height="66" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="385" y="614" text-anchor="middle" class="label">GraphAttentionBlock</text>
+  <text x="385" y="634" text-anchor="middle" class="small">跨通道信息交互与关系建模</text>
+
+  <!-- Stage 5 -->
+  <rect x="600" y="445" width="430" height="235" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="600" y="445" width="430" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="815" y="472" text-anchor="middle" class="sectionTitle">阶段 5：自适应模态融合与频域增强</text>
+
+  <rect x="624" y="510" width="178" height="58" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="713" y="535" text-anchor="middle" class="label">全局池化</text>
+  <text x="713" y="554" text-anchor="middle" class="tiny">pooled_v / pooled_d / pooled_nodes</text>
+
+  <rect x="824" y="510" width="182" height="58" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="915" y="535" text-anchor="middle" class="label">频域增强 Spectral</text>
+  <text x="915" y="554" text-anchor="middle" class="tiny">低频统计补充振荡信息</text>
+
+  <rect x="624" y="590" width="382" height="66" class="inner" fill="#fffaf3" stroke="#e69500"/>
+  <text x="815" y="616" text-anchor="middle" class="label">动态门控 Gate + 融合</text>
+  <text x="815" y="636" text-anchor="middle" class="small">task token 驱动任务上下文与模态融合</text>
+
+  <!-- Stage 6 -->
+  <rect x="1070" y="445" width="320" height="235" class="panel" fill="#f5ecfa" stroke="#8e44ad"/>
+  <rect x="1070" y="445" width="320" height="42" class="panel" fill="#ead8f5" stroke="#8e44ad"/>
+  <text x="1230" y="472" text-anchor="middle" class="sectionTitle">阶段 6：动态早退与多出口预测</text>
+
+  <rect x="1094" y="510" width="272" height="56" class="inner" fill="#f5fbf5" stroke="#43a047"/>
+  <text x="1230" y="535" text-anchor="middle" class="label">决策状态 1 / 2 / N</text>
+  <text x="1230" y="554" text-anchor="middle" class="tiny">multi-stage decision states</text>
+
+  <rect x="1094" y="588" width="272" height="66" class="inner" fill="#fdeff1" stroke="#d64545"/>
+  <text x="1230" y="614" text-anchor="middle" class="label">Boundary Head + Dynamic Early Exit</text>
+  <text x="1230" y="634" text-anchor="middle" class="small">多出口 boundary logits</text>
+
+  <!-- Output -->
+  <rect x="1415" y="485" width="155" height="185" class="panel" fill="#fdeff1" stroke="#d64545"/>
+  <rect x="1415" y="485" width="155" height="38" class="panel" fill="#f9dde2" stroke="#d64545"/>
+  <text x="1492.5" y="510" text-anchor="middle" class="sectionTitle">输出</text>
+  <text x="1492.5" y="555" text-anchor="middle" class="label">Boundary logit</text>
+  <text x="1492.5" y="595" text-anchor="middle" class="label">p_boundary</text>
+  <text x="1492.5" y="635" text-anchor="middle" class="label">Embedding</text>
+
+  <!-- Output note -->
+  <rect x="1180" y="725" width="355" height="92" class="note" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="1357.5" y="753" text-anchor="middle" class="small">评估时对最终出口 logit 做 sigmoid 得到 p_boundary</text>
+  <text x="1357.5" y="778" text-anchor="middle" class="small">阈值在 36-val 上选择，再固定用于 37 / 74 测试</text>
+
+  <!-- Footer note -->
+  <rect x="40" y="800" width="470" height="44" class="note" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="275" y="827" text-anchor="middle" class="small">监督标签来自 boundary_suspicious_samples_index.csv</text>
+
+  <!-- Main connectors -->
+  <path d="M280 220 L320 220" class="conn"/>
+  <path d="M700 220 L740 220" class="conn"/>
+  <path d="M1120 220 L1160 220" class="conn"/>
+  <path d="M1350 335 L1350 392 L385 392 L385 445" class="conn"/>
+  <path d="M560 577 L600 577" class="conn"/>
+  <path d="M1030 577 L1070 577" class="conn"/>
+  <path d="M1390 577 L1415 577" class="conn"/>
+
+  <!-- Internal connectors -->
+  <path d="M510 222 L510 244" class="connSoft"/>
+  <path d="M930 224 L930 246" class="connSoft"/>
+  <path d="M1350 224 L1350 246" class="connSoft"/>
+  <path d="M385 566 L385 588" class="connSoft"/>
+  <path d="M713 568 L713 590" class="connSoft"/>
+  <path d="M915 568 L915 590" class="connSoft"/>
+  <path d="M1230 566 L1230 588" class="connSoft"/>
+
+  <!-- Auxiliary links -->
+  <path d="M160 293 C255 293, 270 192, 344 192" class="connDash"/>
+  <path d="M160 239 C255 239, 275 192, 344 192" class="connSoft"/>
+  <path d="M160 185 C255 185, 275 192, 344 192" class="connSoft"/>
+  <path d="M1350 302 C1350 360, 455 360, 455 510" class="connSoft"/>
+  <path d="M536 621 C565 621, 575 621, 624 621" class="connSoft"/>
+  <path d="M1006 623 C1035 623, 1045 620, 1094 620" class="connSoft"/>
+  <path d="M1492.5 670 L1492.5 725" class="connDash"/>
+
+  <!-- Inline notes -->
+  <text x="810" y="378" text-anchor="middle" class="tiny">通道内建模后形成节点表示，再进入跨通道图交互</text>
+  <text x="800" y="702" text-anchor="middle" class="tiny">最终保留 boundary 检测语义：单任务 logit、sigmoid 概率与辅助 embedding</text>
+</svg>
