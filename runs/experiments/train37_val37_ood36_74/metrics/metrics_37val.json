@@ -1,0 +1,27 @@
+{
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "macro_f1": 1.0,
+  "micro_f1": 1.0,
+  "auc": 1.0,
+  "confusion_matrix": [
+    [
+      228,
+      0
+    ],
+    [
+      0,
+      276
+    ]
+  ],
+  "loss": 0.17888771506055953,
+  "loss_cls": 0.009103306894151805,
+  "loss_risk": 0.007662256888492959,
+  "loss_phys": 0.37506431755092406,
+  "loss_contrastive": 0.9094041415623256,
+  "avg_latency_ms": 41.86209874969791,
+  "split_name": "37val",
+  "num_samples": 504
+}

@@ -1,0 +1,108 @@
+seed: 42
+project_name: phys_hpgt_cross_system_train36
+# Re-run overwrites most outputs in this directory.
+# metrics/best_run_history.jsonl is kept and appended across runs.
+# output_dir: runs/experiments/train74_val74_ood36_37
+# output_dir: runs/experiments/train37_val37_ood36_74
+output_dir: runs/experiments/train36_val36_ood37_74
+
+data:
+  root: npy_jobs
+  # Previous protocol kept for comparison: train on 74 / OOD on 36+37.
+  # train_dir: 74data
+  # Previous protocol kept for comparison: train on 37 / OOD on 36+74.
+  # train_dir: 37data
+  train_dir: 36data
+  test_dirs:
+    # Previous train-on-74 OOD targets:
+    # - 36data
+    # - 37data
+    # Previous train-on-37 OOD targets:
+    # - 36data
+    # - 74data
+    - 37data
+    - 74data
+  val_ratio: 0.1
+  split_seed: 42
+  sentinel: -99999.0
+  angle_preprocess: initial_then_mean
+  num_workers: 0
+  pin_memory: false
+  persistent_workers: false
+
+normalization:
+  method: robust
+  eps: 1.0e-6
+  reuse_saved: true
+  max_values_per_modality: 500000
+  sample_seed: 42
+
+model:
+  patch_len: 16
+  d_model: 128
+  n_layers: 4
+  n_graph_layers: 2
+  n_heads: 4
+  dropout: 0.1
+  temporal_encoder: transformer
+  graph_type: dense_attn
+  graph_topk: 16
+  n_exit: 3
+  early_exit: true
+  use_freq_branch: true
+  ff_mult: 4
+  patch_valid_ratio: 0.25
+  tcn_kernel_size: 3
+
+train:
+  batch_size: 8
+  # Original longer schedule kept for reference.
+  # epochs: 50
+  epochs: 25
+  lr: 3.0e-4
+  weight_decay: 1.0e-2
+  # Original patience kept for reference.
+  # early_stopping_patience: 8
+  early_stopping_patience: 5
+  amp: false
+  grad_clip: 1.0
+  device: cpu
+  compile: false
+  resume: null
+
+loss:
+  w_cls: 1.0
+  w_risk: 0.5
+  lambda_phys: 0.2
+  lambda_con: 0.1
+  focal_gamma: 2.0
+  class_weight_unstable: 3.0
+  auto_class_weight: true
+  contrastive_temperature: 0.07
+  hard_neg: true
+  risk_smooth_l1_beta: 0.1
+
+physics:
+  v_warn: 0.9
+  v_danger: 0.85
+  angle_warn_deg: 120.0
+  angle_danger_deg: 180.0
+
+eval:
+  batch_size: 8
+  threshold: 0.5
+  max_latency_batches: 20
+  monitor_weights:
+    f1: 1.0
+    recall: 0.5
+    auc: 0.5
+
+stream:
+  step: 1
+  exit_threshold: 0.98
+  max_steps: 2048
+
+export:
+  onnx_path: export/phys_hpgt.onnx
+  torchscript_path: export/phys_hpgt.ts
+  opset: 17

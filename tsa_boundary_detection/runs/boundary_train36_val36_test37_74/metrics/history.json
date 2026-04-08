@@ -1,0 +1,404 @@
+{
+  "history": [
+    {
+      "epoch": 0,
+      "train": {
+        "loss": 4.263941377032081,
+        "loss_boundary": 4.263941377032081,
+        "lr": 0.0003
+      },
+      "threshold": 0.05,
+      "36val": {
+        "threshold": 0.05,
+        "accuracy": 0.9903846153846154,
+        "precision": 0.25,
+        "recall": 0.16666666666666666,
+        "f1": 0.2,
+        "pr_auc": 0.18578094610703305,
+        "roc_auc": 0.9806295399515739,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 4,
+        "count_error": -2,
+        "tp": 1,
+        "tn": 823,
+        "fp": 3,
+        "fn": 5,
+        "confusion_matrix": [
+          [
+            823,
+            3
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        "loss": 3.817793913195111,
+        "loss_boundary": 3.817793913195111,
+        "avg_latency_ms": 54.1803379807019,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 1,
+      "train": {
+        "loss": 3.2946357522194796,
+        "loss_boundary": 3.2946357522194796,
+        "lr": 0.0003
+      },
+      "threshold": 0.135,
+      "36val": {
+        "threshold": 0.135,
+        "accuracy": 0.9903846153846154,
+        "precision": 0.25,
+        "recall": 0.16666666666666666,
+        "f1": 0.2,
+        "pr_auc": 0.14926398633295185,
+        "roc_auc": 0.9695318805488297,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 4,
+        "count_error": -2,
+        "tp": 1,
+        "tn": 823,
+        "fp": 3,
+        "fn": 5,
+        "confusion_matrix": [
+          [
+            823,
+            3
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        "loss": 3.7569344658124746,
+        "loss_boundary": 3.7569344658124746,
+        "avg_latency_ms": 54.24523149108259,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 2,
+      "train": {
+        "loss": 2.7277833680671772,
+        "loss_boundary": 2.7277833680671772,
+        "lr": 0.0003
+      },
+      "threshold": 0.05,
+      "36val": {
+        "threshold": 0.05,
+        "accuracy": 0.9855769230769231,
+        "precision": 0.3125,
+        "recall": 0.8333333333333334,
+        "f1": 0.45454545454545453,
+        "pr_auc": 0.3150735294117647,
+        "roc_auc": 0.9909200968523002,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 16,
+        "count_error": 10,
+        "tp": 5,
+        "tn": 815,
+        "fp": 11,
+        "fn": 1,
+        "confusion_matrix": [
+          [
+            815,
+            11
+          ],
+          [
+            1,
+            5
+          ]
+        ],
+        "loss": 2.9927582015772294,
+        "loss_boundary": 2.9927582015772294,
+        "avg_latency_ms": 54.024802523389766,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 3,
+      "train": {
+        "loss": 2.738774813260075,
+        "loss_boundary": 2.738774813260075,
+        "lr": 0.0003
+      },
+      "threshold": 0.20499999999999996,
+      "36val": {
+        "threshold": 0.20499999999999996,
+        "accuracy": 0.9879807692307693,
+        "precision": 0.375,
+        "recall": 1.0,
+        "f1": 0.5454545454545454,
+        "pr_auc": 0.29433760683760685,
+        "roc_auc": 0.9905165456012913,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 16,
+        "count_error": 10,
+        "tp": 6,
+        "tn": 816,
+        "fp": 10,
+        "fn": 0,
+        "confusion_matrix": [
+          [
+            816,
+            10
+          ],
+          [
+            0,
+            6
+          ]
+        ],
+        "loss": 1.405456434162051,
+        "loss_boundary": 1.405456434162051,
+        "avg_latency_ms": 56.45484447100338,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 4,
+      "train": {
+        "loss": 2.2460119829878415,
+        "loss_boundary": 2.2460119829878415,
+        "lr": 0.0003
+      },
+      "threshold": 0.07,
+      "36val": {
+        "threshold": 0.07,
+        "accuracy": 0.9891826923076923,
+        "precision": 0.4,
+        "recall": 1.0,
+        "f1": 0.5714285714285715,
+        "pr_auc": 0.35108363858363856,
+        "roc_auc": 0.9923325262308313,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 15,
+        "count_error": 9,
+        "tp": 6,
+        "tn": 817,
+        "fp": 9,
+        "fn": 0,
+        "confusion_matrix": [
+          [
+            817,
+            9
+          ],
+          [
+            0,
+            6
+          ]
+        ],
+        "loss": 2.200934506144257,
+        "loss_boundary": 2.200934506144257,
+        "avg_latency_ms": 57.13001430306646,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 5,
+      "train": {
+        "loss": 1.9073932641260174,
+        "loss_boundary": 1.9073932641260174,
+        "lr": 0.0003
+      },
+      "threshold": 0.145,
+      "36val": {
+        "threshold": 0.145,
+        "accuracy": 0.9891826923076923,
+        "precision": 0.4,
+        "recall": 1.0,
+        "f1": 0.5714285714285715,
+        "pr_auc": 0.333967883967884,
+        "roc_auc": 0.9919289749798225,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 15,
+        "count_error": 9,
+        "tp": 6,
+        "tn": 817,
+        "fp": 9,
+        "fn": 0,
+        "confusion_matrix": [
+          [
+            817,
+            9
+          ],
+          [
+            0,
+            6
+          ]
+        ],
+        "loss": 1.2440743125918323,
+        "loss_boundary": 1.2440743125918323,
+        "avg_latency_ms": 56.51361117816123,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 6,
+      "train": {
+        "loss": 1.8696835425459062,
+        "loss_boundary": 1.8696835425459062,
+        "lr": 0.0003
+      },
+      "threshold": 0.055,
+      "36val": {
+        "threshold": 0.055,
+        "accuracy": 0.9927884615384616,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "pr_auc": 0.27469135802469136,
+        "roc_auc": 0.9830508474576272,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 6,
+        "count_error": 0,
+        "tp": 3,
+        "tn": 823,
+        "fp": 3,
+        "fn": 3,
+        "confusion_matrix": [
+          [
+            823,
+            3
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "loss": 5.253145722588766,
+        "loss_boundary": 5.253145722588766,
+        "avg_latency_ms": 56.59262079363823,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 7,
+      "train": {
+        "loss": 2.0783356804414717,
+        "loss_boundary": 2.0783356804414717,
+        "lr": 0.0003
+      },
+      "threshold": 0.5599999999999999,
+      "36val": {
+        "threshold": 0.5599999999999999,
+        "accuracy": 0.9795673076923077,
+        "precision": 0.2608695652173913,
+        "recall": 1.0,
+        "f1": 0.41379310344827586,
+        "pr_auc": 0.19814902869822779,
+        "roc_auc": 0.983454398708636,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 23,
+        "count_error": 17,
+        "tp": 6,
+        "tn": 809,
+        "fp": 17,
+        "fn": 0,
+        "confusion_matrix": [
+          [
+            809,
+            17
+          ],
+          [
+            0,
+            6
+          ]
+        ],
+        "loss": 0.3574934188644385,
+        "loss_boundary": 0.3574934188644385,
+        "avg_latency_ms": 56.4087775248761,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 8,
+      "train": {
+        "loss": 2.0631011579795167,
+        "loss_boundary": 2.0631011579795167,
+        "lr": 0.0003
+      },
+      "threshold": 0.05,
+      "36val": {
+        "threshold": 0.05,
+        "accuracy": 0.9915865384615384,
+        "precision": 0.3333333333333333,
+        "recall": 0.16666666666666666,
+        "f1": 0.2222222222222222,
+        "pr_auc": 0.3496947496947498,
+        "roc_auc": 0.989911218724778,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 3,
+        "count_error": -3,
+        "tp": 1,
+        "tn": 824,
+        "fp": 2,
+        "fn": 5,
+        "confusion_matrix": [
+          [
+            824,
+            2
+          ],
+          [
+            5,
+            1
+          ]
+        ],
+        "loss": 4.527383861443695,
+        "loss_boundary": 4.527383861443695,
+        "avg_latency_ms": 58.45568966343797,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    },
+    {
+      "epoch": 9,
+      "train": {
+        "loss": 1.579315462886141,
+        "loss_boundary": 1.579315462886141,
+        "lr": 0.0003
+      },
+      "threshold": 0.09999999999999999,
+      "36val": {
+        "threshold": 0.09999999999999999,
+        "accuracy": 0.9927884615384616,
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "f1": 0.4,
+        "pr_auc": 0.3823232323232323,
+        "roc_auc": 0.9923325262308313,
+        "real_boundary_count": 6,
+        "pred_boundary_count": 4,
+        "count_error": -2,
+        "tp": 2,
+        "tn": 824,
+        "fp": 2,
+        "fn": 4,
+        "confusion_matrix": [
+          [
+            824,
+            2
+          ],
+          [
+            4,
+            2
+          ]
+        ],
+        "loss": 3.106267648208534,
+        "loss_boundary": 3.106267648208534,
+        "avg_latency_ms": 57.10120649130728,
+        "split_name": "36val",
+        "num_samples": 832
+      }
+    }
+  ]
+}

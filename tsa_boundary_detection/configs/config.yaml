@@ -1,0 +1,81 @@
+﻿seed: 42
+project_name: phys_hpgt_boundary_detection
+output_dir: runs/boundary_train36_val36_test37_74
+
+data:
+  root: ../npy_jobs
+  boundary_csv: ../npy_jobs/boundary_suspicious_samples_index.csv
+  train_dir: 36data
+  test_dirs:
+    - 37data
+    - 74data
+  val_ratio: 0.1
+  split_seed: 42
+  sentinel: -99999.0
+  angle_preprocess: initial_then_mean
+  num_workers: 0
+  pin_memory: false
+  persistent_workers: false
+
+normalization:
+  method: robust
+  eps: 1.0e-6
+  reuse_saved: true
+  max_values_per_modality: 500000
+  sample_seed: 42
+
+model:
+  patch_len: 16
+  d_model: 128
+  n_layers: 4
+  n_graph_layers: 2
+  n_heads: 4
+  dropout: 0.1
+  temporal_encoder: transformer
+  graph_type: dense_attn
+  graph_topk: 16
+  n_exit: 3
+  early_exit: true
+  use_freq_branch: true
+  ff_mult: 4
+  patch_valid_ratio: 0.25
+  tcn_kernel_size: 3
+
+train:
+  batch_size: 8
+  epochs: 25
+  lr: 3.0e-4
+  weight_decay: 1.0e-2
+  early_stopping_patience: 5
+  amp: false
+  grad_clip: 1.0
+  device: cpu
+  compile: false
+  resume: null
+  use_weighted_sampler: false
+
+loss:
+  loss_type: bce_logits
+  pos_weight: null
+  focal_gamma: 2.0
+
+threshold:
+  objective: f1
+  min: 0.05
+  max: 0.95
+  num_steps: 181
+
+eval:
+  batch_size: 8
+
+visualization:
+  enabled: true
+  splits:
+    - 37test
+    - 74test
+  max_predicted_boundary: 80
+  max_tp: 80
+  max_fp: 80
+  max_fn: 80
+  max_channels: 16
+  downsample: 2

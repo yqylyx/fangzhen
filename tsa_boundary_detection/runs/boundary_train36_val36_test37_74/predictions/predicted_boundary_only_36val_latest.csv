@@ -1,0 +1,5 @@
+﻿file,dataset_name,sample_id,true_boundary_label,pred_boundary_label,p_boundary,threshold_used,is_correct
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_133_110_1.npy,36,job_133_110_1,1,1,0.15217988193035126,0.09999999999999999,1
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_144_120_1.npy,36,job_144_120_1,0,1,0.99895179271698,0.09999999999999999,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_196_120_1.npy,36,job_196_120_1,0,1,0.8347350358963013,0.09999999999999999,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_508_110_1.npy,36,job_508_110_1,1,1,0.39445215463638306,0.09999999999999999,1

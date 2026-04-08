@@ -1,0 +1,50 @@
+{
+  "data_root": "E:\\PaperProject\\npy_jobs",
+  "boundary_csv": "E:\\PaperProject\\npy_jobs\\boundary_suspicious_samples_index.csv",
+  "train_dir": "36data",
+  "test_dirs": [
+    "37data",
+    "74data"
+  ],
+  "val_ratio": 0.1,
+  "val_split_name": "36val",
+  "ood_splits": [
+    {
+      "split_key": "ood_37",
+      "dataset_tag": "37",
+      "dataset_dir": "37data",
+      "split_name": "37test",
+      "title": "OOD boundary test on 37data"
+    },
+    {
+      "split_key": "ood_74",
+      "dataset_tag": "74",
+      "dataset_dir": "74data",
+      "split_name": "74test",
+      "title": "OOD boundary test on 74data"
+    }
+  ],
+  "split_counts": {
+    "train": 7488,
+    "val": 832,
+    "ood_37": 5046,
+    "ood_74": 12150
+  },
+  "dataset_boundary_counts": {
+    "36": {
+      "total": 8320,
+      "boundary": 60,
+      "non_boundary": 8260
+    },
+    "37": {
+      "total": 5046,
+      "boundary": 22,
+      "non_boundary": 5024
+    },
+    "74": {
+      "total": 12150,
+      "boundary": 70,
+      "non_boundary": 12080
+    }
+  }
+}

@@ -1,0 +1,16 @@
+﻿file,dataset_name,sample_id,true_boundary_label,pred_boundary_label,p_boundary,threshold_used,is_correct
+E:\PaperProject\npy_jobs\36data\CurveResult 50%\job_127_115_0.npy,36,job_127_115_0,1,1,0.11008645594120026,0.07,1
+E:\PaperProject\npy_jobs\36data\CurveResult 50%\job_23_110_1.npy,36,job_23_110_1,1,1,0.08181659877300262,0.07,1
+E:\PaperProject\npy_jobs\36data\CurveResult 50%\job_23_115_0.npy,36,job_23_115_0,0,1,0.12426803261041641,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 50%\job_49_115_0.npy,36,job_49_115_0,0,1,0.12426325678825378,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 50%\job_75_115_0.npy,36,job_75_115_0,1,1,0.11013787239789963,0.07,1
+E:\PaperProject\npy_jobs\36data\CurveResult 50%\job_75_120_0.npy,36,job_75_120_0,0,1,0.11994398385286331,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_133_110_1.npy,36,job_133_110_1,1,1,0.5588037967681885,0.07,1
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_144_120_1.npy,36,job_144_120_1,0,1,0.7871448397636414,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_170_120_1.npy,36,job_170_120_1,0,1,0.7362571358680725,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_196_120_1.npy,36,job_196_120_1,0,1,0.5167173147201538,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_315_115_1.npy,36,job_315_115_1,0,1,0.37698274850845337,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_456_110_1.npy,36,job_456_110_1,0,1,0.3017198443412781,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_456_115_1.npy,36,job_456_115_1,0,1,0.1363353133201599,0.07,0
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_482_115_1.npy,36,job_482_115_1,1,1,0.16181699931621552,0.07,1
+E:\PaperProject\npy_jobs\36data\CurveResult 70%\job_508_110_1.npy,36,job_508_110_1,1,1,0.3333051800727844,0.07,1

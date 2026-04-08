@@ -1,0 +1,41 @@
+{
+  "csv_boundary_count_total": 152,
+  "train": {
+    "total": 7488,
+    "boundary": 54,
+    "non_boundary": 7434
+  },
+  "val": {
+    "total": 832,
+    "boundary": 6,
+    "non_boundary": 826
+  },
+  "37test": {
+    "total": 5046,
+    "boundary": 22,
+    "non_boundary": 5024
+  },
+  "74test": {
+    "total": 12150,
+    "boundary": 70,
+    "non_boundary": 12080
+  },
+  "dataset_boundary_counts": {
+    "36": {
+      "total": 8320,
+      "boundary": 60,
+      "non_boundary": 8260
+    },
+    "37": {
+      "total": 5046,
+      "boundary": 22,
+      "non_boundary": 5024
+    },
+    "74": {
+      "total": 12150,
+      "boundary": 70,
+      "non_boundary": 12080
+    }
+  },
+  "loss_pos_weight": 137.66666666666666
+}

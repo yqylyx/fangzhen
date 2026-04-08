@@ -1,0 +1,31 @@
+{
+  "threshold": 0.07,
+  "accuracy": 0.8038683127572016,
+  "precision": 0.027766435279706004,
+  "recall": 0.9714285714285714,
+  "f1": 0.05398967844382692,
+  "pr_auc": 0.10895854399836355,
+  "roc_auc": 0.9216000473036897,
+  "real_boundary_count": 70,
+  "pred_boundary_count": 2449,
+  "count_error": 2379,
+  "tp": 68,
+  "tn": 9699,
+  "fp": 2381,
+  "fn": 2,
+  "confusion_matrix": [
+    [
+      9699,
+      2381
+    ],
+    [
+      2,
+      68
+    ]
+  ],
+  "loss": 1.3898661905372092,
+  "loss_boundary": 1.3898661905372092,
+  "avg_latency_ms": 90.33201305139781,
+  "split_name": "74test",
+  "num_samples": 12150
+}

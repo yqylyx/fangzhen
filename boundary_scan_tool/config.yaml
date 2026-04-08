@@ -1,0 +1,150 @@
+﻿scan:
+  datasets:
+    - 36data
+    - 37data
+    - 74data
+  recursive: true
+  top_k: 300
+  log_every: 200
+
+features:
+  invalid_value: -99999.0
+  tail_window_sec: 2.0
+  final_window_sec: 1.0
+  relative_angle_mode: per_time_median
+
+score:
+  gaussian_terms:
+    tail_voltage_min:
+      tau: 0.90
+      sigma: 0.03
+      weight: 0.30
+    final_recovered_ratio_0_9:
+      tau: 0.85
+      sigma: 0.08
+      weight: 0.25
+    tail_spread_mean:
+      tau: 120.0
+      sigma: 25.0
+      weight: 0.25
+    angle_speed_median:
+      tau: 20.0
+      sigma: 8.0
+      weight: 0.20
+  stable_clear:
+    tail_voltage_min_gte: 0.95
+    final_recovered_ratio_0_9_gte: 0.98
+    tail_spread_mean_lte: 80.0
+    angle_speed_median_lte: 5.0
+  unstable_clear:
+    tail_voltage_min_lte: 0.75
+    final_recovered_ratio_0_9_lte: 0.30
+    tail_spread_mean_gte: 180.0
+    duration_below_0_8_gte: 2.0
+  unstable_dynamic_clear:
+    min_condition_count: 2
+    tail_spread_mean_gte: 120.0
+    angle_speed_median_gte: 45.0
+    tail_spread_slope_abs_gte: 20.0
+    spread_peak_gte: 110.0
+  stable_penalty_multiplier: 0.35
+  unstable_penalty_multiplier: 0.35
+  max_boundary_score: 1.5
+  stable_candidate_override:
+    min_condition_count: 3
+    high_voltage_fast_signal_gte: 0.90
+    tail_spread_mean_gte: 115.0
+    angle_speed_median_gte: 18.0
+    spread_peak_gte: 140.0
+  side_boundary:
+    stable_side:
+      min_condition_count: 2
+      bonus_weight: 0.22
+      tail_spread_mean_gte: 90.0
+      tail_spread_mean_lte: 175.0
+      angle_speed_median_gte: 8.0
+      angle_speed_median_lte: 35.0
+      tail_voltage_min_gte: 0.82
+      tail_voltage_min_lte: 0.94
+      final_recovered_ratio_0_9_gte: 0.70
+      final_recovered_ratio_0_9_lte: 1.00
+      tail_spread_slope_abs_lte: 12.0
+      score_terms:
+        tail_spread_mean:
+          tau: 110.0
+          sigma: 20.0
+          weight: 0.35
+        angle_speed_median:
+          tau: 14.0
+          sigma: 6.0
+          weight: 0.30
+        tail_voltage_min:
+          tau: 0.91
+          sigma: 0.03
+          weight: 0.20
+        tail_spread_slope_abs:
+          tau: 4.0
+          sigma: 4.0
+          weight: 0.15
+    high_voltage_fast_instability:
+      min_condition_count: 3
+      bonus_weight: 0.34
+      tail_voltage_min_gte: 0.94
+      final_recovered_ratio_0_9_gte: 0.95
+      tail_spread_mean_gte: 95.0
+      tail_spread_mean_lte: 180.0
+      angle_speed_median_gte: 12.0
+      spread_peak_gte: 110.0
+      score_terms:
+        tail_spread_mean:
+          tau: 125.0
+          sigma: 22.0
+          weight: 0.40
+        angle_speed_median:
+          tau: 18.0
+          sigma: 6.0
+          weight: 0.35
+        spread_peak:
+          tau: 135.0
+          sigma: 25.0
+          weight: 0.25
+    unstable_side:
+      min_condition_count: 2
+      bonus_weight: 0.18
+      tail_spread_mean_gte: 110.0
+      tail_spread_mean_lte: 170.0
+      angle_speed_median_gte: 10.0
+      angle_speed_median_lte: 35.0
+      tail_voltage_min_gte: 0.76
+      tail_voltage_min_lte: 0.90
+      final_recovered_ratio_0_9_gte: 0.20
+      final_recovered_ratio_0_9_lte: 0.80
+      tail_spread_slope_abs_lte: 18.0
+      score_terms:
+        tail_spread_mean:
+          tau: 140.0
+          sigma: 18.0
+          weight: 0.30
+        angle_speed_median:
+          tau: 20.0
+          sigma: 6.0
+          weight: 0.25
+        tail_voltage_min:
+          tau: 0.82
+          sigma: 0.04
+          weight: 0.25
+        final_recovered_ratio_0_9:
+          tau: 0.55
+          sigma: 0.16
+          weight: 0.20
+
+visualization:
+  dpi: 110
+  figsize: [12, 8]
+  voltage_ylim: [0.5, 1.15]
+  plot_alpha_voltage: 0.18
+  plot_alpha_angle: 0.22
+
+report:
+  per_dataset_show: 60
+  side_boundary_show: 80

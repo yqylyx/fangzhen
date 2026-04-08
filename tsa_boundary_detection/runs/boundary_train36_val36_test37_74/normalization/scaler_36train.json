@@ -1,0 +1,16 @@
+{
+  "method": "robust",
+  "eps": 1e-06,
+  "voltage_center": 0.9851700067520142,
+  "voltage_scale": 0.1249699592590332,
+  "delta_center": -1.469336986541748,
+  "delta_scale": 595.4465962648392,
+  "metadata": {
+    "fit_on": "36data-train",
+    "angle_preprocess": "initial_then_mean",
+    "max_values_per_modality": 500000,
+    "sample_seed": 42,
+    "num_sampled_voltage_values": 500000,
+    "num_sampled_delta_values": 500000
+  }
+}

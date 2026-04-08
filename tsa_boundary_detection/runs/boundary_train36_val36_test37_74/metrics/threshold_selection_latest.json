@@ -1,0 +1,8 @@
+{
+  "epoch": 9,
+  "objective": "f1",
+  "best_threshold": 0.09999999999999999,
+  "val_precision": 0.5,
+  "val_recall": 0.3333333333333333,
+  "val_f1": 0.4
+}

@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run: Scan npy_jobs",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/detect_stability.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--input_dir",
+                "${workspaceFolder}/npy_jobs",
+                "--output_dir",
+                "${workspaceFolder}/out_full",
+                "--config",
+                "${workspaceFolder}/config.yaml",
+                "--recursive",
+                "--plot"
+            ],
+            "env": {
+                "TMP": "${workspaceFolder}/tmp",
+                "TEMP": "${workspaceFolder}/tmp",
+                "MPLCONFIGDIR": "${workspaceFolder}/.matplotlib_cache"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Run: Current file",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/detect_stability.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "--input_file",
+                "${file}",
+                "--output_dir",
+                "${workspaceFolder}/out_single",
+                "--config",
+                "${workspaceFolder}/config.yaml",
+                "--plot"
+            ],
+            "env": {
+                "TMP": "${workspaceFolder}/tmp",
+                "TEMP": "${workspaceFolder}/tmp",
+                "MPLCONFIGDIR": "${workspaceFolder}/.matplotlib_cache"
+            },
+            "justMyCode": false
+        }
+    ]
+}
