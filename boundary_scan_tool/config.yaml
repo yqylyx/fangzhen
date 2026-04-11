@@ -1,11 +1,19 @@
-﻿scan:
+scan:
   datasets:
     - 36data
     - 37data
     - 74data
   recursive: true
-  top_k: 300
   log_every: 200
+
+seed:
+  csv_path: npy_jobs/boundary_suspicious_samples_index.csv
+  match_priority:
+    - file
+    - source_abs_path
+    - sample_name_dataset_name
+  same_dataset_bias: 0.18
+  nearest_k: 5
 
 features:
   invalid_value: -99999.0
@@ -13,138 +21,185 @@ features:
   final_window_sec: 1.0
   relative_angle_mode: per_time_median
 
-score:
-  gaussian_terms:
-    tail_voltage_min:
-      tau: 0.90
-      sigma: 0.03
-      weight: 0.30
-    final_recovered_ratio_0_9:
-      tau: 0.85
-      sigma: 0.08
-      weight: 0.25
-    tail_spread_mean:
-      tau: 120.0
-      sigma: 25.0
-      weight: 0.25
-    angle_speed_median:
-      tau: 20.0
-      sigma: 8.0
-      weight: 0.20
-  stable_clear:
-    tail_voltage_min_gte: 0.95
+features_local_oscillation:
+  middle_window_sec: 2.0
+  large_amp_threshold_1: 20.0
+  large_amp_threshold_2: 30.0
+  decay_ratio_norm: 1.2
+  sign_change_density_norm: 0.35
+  tail_amp_norm: 30.0
+
+features_stable_side:
+  low_voltage_threshold: 0.9
+  spread_danger_threshold: 120.0
+  reentry_norm: 3.0
+  tail_min_voltage_std_norm: 0.03
+  non_recovery_norm: 0.5
+
+scoring_branches:
+  similarity_features:
+    - tail_voltage_min
+    - final_recovered_ratio_0_9
+    - tail_spread_mean
+    - tail_spread_slope
+    - angle_speed_median
+    - spread_peak
+    - tail_amp_top1
+    - tail_amp_top2
+    - tail_amp_top1_ratio
+    - amp_std_across_channels
+    - top1_minus_median_amp
+    - decay_ratio_top1
+    - decay_ratio_mean
+    - voltage_rebound_instability_score
+    - tail_low_voltage_reentry_count
+    - spread_reentry_count
+    - tail_sign_change_density
+    - oscillation_persistence_score
+  base_terms:
+    tail_voltage_min: {center: 0.90, sigma: 0.04, weight: 0.28}
+    final_recovered_ratio_0_9: {center: 0.82, sigma: 0.10, weight: 0.22}
+    tail_spread_mean: {center: 120.0, sigma: 30.0, weight: 0.28}
+    angle_speed_median: {center: 16.0, sigma: 8.0, weight: 0.22}
+  stable_side_terms:
+    tail_voltage_min: {center: 0.90, sigma: 0.035, weight: 0.18}
+    final_recovered_ratio_0_9: {center: 0.88, sigma: 0.08, weight: 0.10}
+    tail_spread_mean: {center: 115.0, sigma: 24.0, weight: 0.18}
+    tail_spread_slope: {center: 0.0, sigma: 6.0, weight: 0.10}
+    tail_amp_top1: {center: 28.0, sigma: 10.0, weight: 0.14}
+    tail_amp_top2: {center: 18.0, sigma: 8.0, weight: 0.08}
+    top1_minus_median_amp: {center: 18.0, sigma: 9.0, weight: 0.08}
+    voltage_rebound_instability_score: {center: 0.60, sigma: 0.22, weight: 0.08}
+    oscillation_persistence_score: {center: 0.68, sigma: 0.20, weight: 0.06}
+  unstable_side_terms:
+    tail_voltage_min: {center: 0.82, sigma: 0.05, weight: 0.18}
+    final_recovered_ratio_0_9: {center: 0.45, sigma: 0.18, weight: 0.15}
+    tail_spread_mean: {center: 145.0, sigma: 25.0, weight: 0.18}
+    angle_speed_median: {center: 20.0, sigma: 8.0, weight: 0.14}
+    tail_spread_slope: {center: 2.0, sigma: 10.0, weight: 0.08}
+    seed_similarity_score: {center: 0.75, sigma: 0.18, weight: 0.10}
+    decay_ratio_mean: {center: 0.95, sigma: 0.30, weight: 0.09}
+    oscillation_persistence_score: {center: 0.55, sigma: 0.24, weight: 0.08}
+  central_ambiguous_terms:
+    tail_voltage_min: {center: 0.87, sigma: 0.05, weight: 0.20}
+    final_recovered_ratio_0_9: {center: 0.65, sigma: 0.18, weight: 0.18}
+    tail_spread_mean: {center: 125.0, sigma: 20.0, weight: 0.20}
+    angle_speed_median: {center: 16.0, sigma: 7.0, weight: 0.15}
+    tail_spread_slope: {center: 0.0, sigma: 8.0, weight: 0.07}
+    voltage_rebound_instability_score: {center: 0.45, sigma: 0.22, weight: 0.08}
+    tail_sign_change_density: {center: 0.32, sigma: 0.16, weight: 0.06}
+    seed_similarity_score: {center: 0.70, sigma: 0.20, weight: 0.06}
+  branch_mix:
+    stable_label:
+      stable_side_score: 0.48
+      central_ambiguous_score: 0.20
+      seed_similarity_score: 0.32
+    unstable_label:
+      unstable_side_score: 0.48
+      central_ambiguous_score: 0.20
+      seed_similarity_score: 0.32
+    default:
+      stable_side_score: 0.28
+      unstable_side_score: 0.28
+      central_ambiguous_score: 0.20
+      seed_similarity_score: 0.24
+  obvious_stable:
+    tail_voltage_min_gte: 0.96
     final_recovered_ratio_0_9_gte: 0.98
-    tail_spread_mean_lte: 80.0
-    angle_speed_median_lte: 5.0
-  unstable_clear:
-    tail_voltage_min_lte: 0.75
+    tail_spread_mean_lte: 70.0
+    angle_speed_median_lte: 6.0
+    tail_amp_top1_lte: 12.0
+    hard_min_condition_count: 7
+    hard_tail_voltage_min_gte: 0.95
+    hard_final_recovered_ratio_0_9_gte: 0.99
+    hard_tail_spread_mean_lte: 75.0
+    hard_angle_speed_median_lte: 14.0
+    hard_tail_amp_top1_lte: 10.0
+    hard_large_amp_channel_count_20_lte: 0.0
+    hard_tail_low_voltage_reentry_count_lte: 0.0
+    hard_spread_reentry_count_lte: 0.0
+    hard_oscillation_persistence_score_lte: 0.50
+    candidate_min_dynamic_condition_count: 2
+    candidate_min_risk_condition_count: 1
+    candidate_tail_spread_mean_gte: 95.0
+    candidate_angle_speed_median_gte: 12.0
+    candidate_tail_amp_top1_gte: 24.0
+    candidate_large_amp_channel_count_20_gte: 2.0
+    candidate_oscillation_persistence_score_gte: 0.58
+    candidate_tail_voltage_min_lte: 0.94
+    candidate_final_recovered_ratio_0_9_lte: 0.99
+    candidate_tail_low_voltage_reentry_count_gte: 1.0
+    candidate_spread_reentry_count_gte: 1.0
+    candidate_voltage_rebound_instability_score_gte: 0.42
+    very_stable_tail_voltage_min_gte: 0.96
+    very_stable_final_recovered_ratio_0_9_gte: 0.995
+    very_stable_tail_low_voltage_reentry_count_lte: 0.0
+    very_stable_spread_reentry_count_lte: 0.0
+    very_stable_tail_spread_mean_lte: 90.0
+    very_stable_angle_speed_median_lte: 16.0
+    very_stable_large_amp_channel_count_20_lte: 5.0
+  obvious_unstable:
+    min_condition_count: 2
+    tail_voltage_min_lte: 0.74
     final_recovered_ratio_0_9_lte: 0.30
     tail_spread_mean_gte: 180.0
     duration_below_0_8_gte: 2.0
-  unstable_dynamic_clear:
-    min_condition_count: 2
-    tail_spread_mean_gte: 120.0
-    angle_speed_median_gte: 45.0
-    tail_spread_slope_abs_gte: 20.0
-    spread_peak_gte: 110.0
-  stable_penalty_multiplier: 0.35
-  unstable_penalty_multiplier: 0.35
-  max_boundary_score: 1.5
-  stable_candidate_override:
-    min_condition_count: 3
-    high_voltage_fast_signal_gte: 0.90
-    tail_spread_mean_gte: 115.0
-    angle_speed_median_gte: 18.0
-    spread_peak_gte: 140.0
-  side_boundary:
-    stable_side:
-      min_condition_count: 2
-      bonus_weight: 0.22
-      tail_spread_mean_gte: 90.0
-      tail_spread_mean_lte: 175.0
-      angle_speed_median_gte: 8.0
-      angle_speed_median_lte: 35.0
-      tail_voltage_min_gte: 0.82
-      tail_voltage_min_lte: 0.94
-      final_recovered_ratio_0_9_gte: 0.70
-      final_recovered_ratio_0_9_lte: 1.00
-      tail_spread_slope_abs_lte: 12.0
-      score_terms:
-        tail_spread_mean:
-          tau: 110.0
-          sigma: 20.0
-          weight: 0.35
-        angle_speed_median:
-          tau: 14.0
-          sigma: 6.0
-          weight: 0.30
-        tail_voltage_min:
-          tau: 0.91
-          sigma: 0.03
-          weight: 0.20
-        tail_spread_slope_abs:
-          tau: 4.0
-          sigma: 4.0
-          weight: 0.15
-    high_voltage_fast_instability:
-      min_condition_count: 3
-      bonus_weight: 0.34
-      tail_voltage_min_gte: 0.94
-      final_recovered_ratio_0_9_gte: 0.95
-      tail_spread_mean_gte: 95.0
-      tail_spread_mean_lte: 180.0
-      angle_speed_median_gte: 12.0
-      spread_peak_gte: 110.0
-      score_terms:
-        tail_spread_mean:
-          tau: 125.0
-          sigma: 22.0
-          weight: 0.40
-        angle_speed_median:
-          tau: 18.0
-          sigma: 6.0
-          weight: 0.35
-        spread_peak:
-          tau: 135.0
-          sigma: 25.0
-          weight: 0.25
-    unstable_side:
-      min_condition_count: 2
-      bonus_weight: 0.18
-      tail_spread_mean_gte: 110.0
-      tail_spread_mean_lte: 170.0
-      angle_speed_median_gte: 10.0
-      angle_speed_median_lte: 35.0
-      tail_voltage_min_gte: 0.76
-      tail_voltage_min_lte: 0.90
-      final_recovered_ratio_0_9_gte: 0.20
-      final_recovered_ratio_0_9_lte: 0.80
-      tail_spread_slope_abs_lte: 18.0
-      score_terms:
-        tail_spread_mean:
-          tau: 140.0
-          sigma: 18.0
-          weight: 0.30
-        angle_speed_median:
-          tau: 20.0
-          sigma: 6.0
-          weight: 0.25
-        tail_voltage_min:
-          tau: 0.82
-          sigma: 0.04
-          weight: 0.25
-        final_recovered_ratio_0_9:
-          tau: 0.55
-          sigma: 0.16
-          weight: 0.20
+    non_recovery_ratio_gte: 0.60
+    spread_peak_gte: 180.0
+    angle_speed_p90_gte: 50.0
+    invalid_angle_ratio_gte: 0.08
+    severe_min_condition_count: 3
+    severe_tail_spread_mean_gte: 145.0
+    severe_angle_speed_median_gte: 35.0
+    severe_angle_speed_p90_gte: 60.0
+    severe_tail_amp_top1_gte: 80.0
+    severe_large_amp_channel_count_20_gte: 6.0
+    severe_spread_peak_gte: 200.0
+    hard_tail_voltage_min_lte: 0.20
+    hard_tail_amp_top1_gte: 120.0
+    hard_tail_amp_top2_gte: 100.0
+    hard_large_amp_channel_count_20_gte: 5.0
+    hard_tail_spread_mean_gte: 130.0
+    candidate_min_dynamic_condition_count: 2
+    candidate_tail_spread_mean_gte: 95.0
+    candidate_angle_speed_median_gte: 8.0
+    candidate_tail_amp_top1_gte: 18.0
+    candidate_large_amp_channel_count_20_gte: 1.0
+    candidate_spread_reentry_count_gte: 1.0
+    candidate_oscillation_persistence_score_gte: 0.48
+    candidate_core_min_dynamic_condition_count: 1
+    candidate_core_tail_spread_mean_gte: 85.0
+    candidate_core_angle_speed_median_gte: 6.0
+    candidate_core_tail_amp_top1_gte: 15.0
+    candidate_core_large_amp_channel_count_20_gte: 1.0
+  candidate_threshold: 0.42
+  low_confidence_threshold: 0.33
+  stable_clear_penalty: 0.35
+  unstable_clear_penalty: 0.20
+
+ranking:
+  top_k: 300
+  new_candidate_top_k: 180
+  per_category_top_k: 80
+  per_dataset_top_k: 60
+  max_per_dataset_in_topk: 90
+  category_cycle:
+    - stable_side_boundary_candidate
+    - central_ambiguous_candidate
+    - unstable_side_boundary_candidate
+
+outputs:
+  write_report_md: true
+  report_overall_top_n: 80
+  report_new_top_n: 120
+  report_category_top_n: 60
+  report_dataset_top_n: 40
 
 visualization:
   dpi: 110
-  figsize: [12, 8]
+  figsize: [14.5, 8.7]
   voltage_ylim: [0.5, 1.15]
-  plot_alpha_voltage: 0.18
-  plot_alpha_angle: 0.22
-
-report:
-  per_dataset_show: 60
-  side_boundary_show: 80
+  plot_alpha_voltage: 0.16
+  plot_alpha_angle: 0.18
+  info_panel_width_ratio: 0.52
+  aux_panel_height_ratio: 0.62

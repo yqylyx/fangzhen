@@ -71,6 +71,7 @@ eval:
 visualization:
   enabled: true
   splits:
+    - 36val
     - 37test
     - 74test
   max_predicted_boundary: 80

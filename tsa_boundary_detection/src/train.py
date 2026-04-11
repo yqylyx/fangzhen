@@ -76,7 +76,7 @@ def train_one_epoch(
     num_batches = 0
     progress = tqdm(loader, desc=train_desc, leave=False, dynamic_ncols=False, ncols=72, mininterval=1.0, file=sys.stdout, bar_format='{desc}: {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]')
     for batch in progress:
-        # ??????????? boundary ??????????????? risk ?????
+        # 先把当前 batch 搬到目标设备，再执行边界检测训练的一次前向与反向传播。
         batch = to_device(batch, device)
         optimizer.zero_grad(set_to_none=True)
         autocast_ctx = torch.autocast(device_type='cuda', dtype=torch.float16, enabled=amp_enabled) if amp_enabled else contextlib.nullcontext()
@@ -133,7 +133,7 @@ def main() -> None:
     ensure_dir(out_dir / 'normalization')
     ensure_dir(out_dir / 'splits')
 
-    # ??????????????????? split ? DataLoader?
+    # 按当前协议构建 train/val/test 划分，并创建对应的 DataLoader。
     loaders, _, proto, _, label_stats = build_dataloaders(cfg, out_dir)
     print(json.dumps({'csv_boundary_count_total': label_stats['csv_boundary_count_total'], 'dataset_boundary_counts': label_stats['dataset_boundary_counts']}, ensure_ascii=False, indent=2))
     print(json.dumps({'train_label_stats': label_stats['train'], 'val_label_stats': label_stats['val'], 'loss_pos_weight': label_stats['loss_pos_weight']}, ensure_ascii=False, indent=2))
@@ -153,7 +153,7 @@ def main() -> None:
     best_score = -float('inf')
     patience = 0
 
-    # ???????????? 0.5????? 36-val ????????
+    # 阈值不是固定 0.5，而是先在 36-val 上搜索当前更合适的决策阈值。
     threshold_cfg = cfg.get('threshold', {})
     objective = str(threshold_cfg.get('objective', 'f1'))
     threshold_grid = build_threshold_grid(
@@ -169,7 +169,7 @@ def main() -> None:
         epochs = int(cfg.get('train', {}).get('epochs', 25))
         early_patience = int(cfg.get('train', {}).get('early_stopping_patience', 5))
         for epoch in range(start_epoch, epochs):
-            # ?? epoch ??????? 36-val ????????????????
+            # 每个 epoch 后都在 36-val 上重新选阈值，再用该阈值评估当前模型。
             train_metrics = train_one_epoch(model, loaders['train'], optimizer, scaler, cfg, train_desc=f"train_boundary_{proto['train_tag']}")
             val_metrics_05, val_predictions_05, val_raw = evaluate_loader(model, loaders['val'], cfg, proto['val_split_name'], threshold=0.5, save_visuals=False)
             selection = select_best_threshold(val_raw['y_true'], val_raw['y_prob'], objective=objective, threshold_grid=threshold_grid)
@@ -209,8 +209,8 @@ def main() -> None:
             )
 
             if score > best_score:
-                # best checkpoint ???? 36-val ???? F1?
-                # ??????????????
+                # best checkpoint 按 36-val 上的 F1 指标保存。
+                # 这样最终保留下来的模型与阈值是一起联动选择出来的。
                 best_score = score
                 patience = 0
                 save_checkpoint(best_ckpt, model, optimizer, scaler, epoch, cfg, val_metrics, best_threshold)

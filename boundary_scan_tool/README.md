@@ -1,152 +1,171 @@
 ﻿# Boundary Scan Tool
 
-这是一个独立的边界样本筛选与可视化工具，与主模型训练代码解耦，可以单独运行。
+这个增强后的 `boundary_scan_tool` 用于边界样本补全和主动发现。
 
-它的目的不是训练边界分类器，也不是让你去 CSV 里逐条手工改标签，而是：
+当前目标不是立即训练最终的边界分类模型，而是先尽可能把边界样本找全，尤其是那些容易漏掉的样本：
 
-- 自动筛查可疑边界样本
-- 自动识别稳定侧边界样本
-- 自动识别高电压但接近快失稳的稳定侧边界样本
-- 自动识别失稳侧边界样本
-- 自动生成电压/功角曲线图
-- 自动生成可视化报告
-- 方便人工查看临界工况、弱阻尼工况、过渡工况
+- 稳定侧边界样本
+- 失稳侧边界样本
+- 中间临界边界样本
+- 只有 1~2 条功角通道振荡特别强，但整体仍然看起来比较稳定的样本
 
-## 独立性说明
+## 当前工具定位
 
-本工具的所有核心文件都位于 `boundary_scan_tool/` 目录中，不依赖现有项目里的自定义训练模块。
-你可以把整个目录单独放进项目中使用。
+这个工具现在服务的是：
 
-## 依赖
+- 边界样本补全
+- 边界样本主动发现
+- 高召回候选挖掘
 
-- Python 3
-- numpy
-- pandas
-- matplotlib
-- pyyaml
+它不会把 CSV 外的所有样本直接当成最终负类。
 
-示例安装：
+## 输入数据
 
-```bash
-pip install numpy pandas matplotlib pyyaml
-```
+默认扫描：
 
-## 目录结构
+- `npy_jobs/36data`
+- `npy_jobs/37data`
+- `npy_jobs/74data`
 
-```text
-boundary_scan_tool/
-├── boundary_scan.py
-├── feature_extract.py
-├── visualization.py
-├── report_builder.py
-├── config.yaml
-└── README.md
-```
+每个 `.npy` 样本通常包含这些字段：
 
-## 运行方式
+- `angles`
+- `voltages`
+- `times`
+- `label`
 
-默认以项目根目录下的 `npy_jobs` 作为输入根目录，扫描其中的 `36data`、`37data`、`74data`。
+## seed 边界集
 
-如果你不想写命令行参数，直接运行 `boundary_scan_tool/boundary_scan.py` 也可以，脚本会默认读取项目根目录下的 `npy_jobs`，并把结果输出到 `results/boundary_scan/`。
+工具默认读取：
+
+- `npy_jobs/boundary_suspicious_samples_index.csv`
+
+并把它视为已确认的 seed 边界样本集。
+
+匹配优先级是：
+
+1. `file`
+2. `source_abs_path`
+3. `sample_name + dataset_name`
+
+被匹配到的样本会标记为 `is_seed_boundary = 1`。剩余样本则作为“未确认样本”，继续作为主动发现的搜索空间。
+
+## 为什么现在要分三类候选
+
+单一 `boundary_score` 很容易向某一类样本偏移。在实际中这会造成：
+
+- 稳定侧边界被失稳侧样本淹没
+- 局部强振荡样本被更明显的全局失效掩盖
+
+所以工具现在会输出至少这三类候选：
+
+- `stable_side_boundary_candidate`
+- `unstable_side_boundary_candidate`
+- `central_ambiguous_candidate`
+
+同时也会保留：
+
+- `obvious_stable`
+- `obvious_unstable`
+
+## 特征增强
+
+工具在保留原有电压和功角特征的基础上，新增了两组重点特征。
+
+### 1. 局部强振荡特征
+
+例如：
+
+- `tail_amp_top1`
+- `tail_amp_top2`
+- `tail_amp_top1_ratio`
+- `tail_amp_top2_ratio`
+- `large_amp_channel_count_20`
+- `large_amp_channel_count_30`
+- `amp_std_across_channels`
+- `amp_gini_like`
+- `top1_minus_median_amp`
+- `decay_ratio_top1`
+- `decay_ratio_mean`
+
+这一组主要用来找出“只有少数功角通道特别危险”的样本。
+
+### 2. 稳定侧临界特征
+
+例如：
+
+- `voltage_rebound_instability_score`
+- `tail_low_voltage_reentry_count`
+- `spread_reentry_count`
+- `tail_sign_change_density`
+- `oscillation_persistence_score`
+
+这一组主要用来找出“最后虽然还稳定，但过程非常临界”的样本。
+
+## 评分输出
+
+现在工具不再只输出一个笼统的分数，而是同时给出：
+
+- `stable_side_score`
+- `unstable_side_score`
+- `central_ambiguous_score`
+- `seed_similarity_score`
+- `overall_candidate_score`
+
+其中 `seed_similarity_score` 是基于标准化后的特征向量，与 seed 边界样本集进行最近邻相似度计算，并加入同数据集偏置。
+
+## 可视化
+
+图像布局现在不再把文字框叠在曲线上。
+
+现在固定为：
+
+- 左上：全部电压曲线
+- 左中：全部相对功角曲线
+- 左下：辅助统计曲线，例如 `spread_t` 和 `min_voltage_t`
+- 右侧：独立信息面板
+
+这样人工看图会更直接。
+
+## 主要输出
+
+默认输出到：
+
+- `results/boundary_scan/`
+
+关键文件包括：
+
+- `all_samples_boundary_scores.csv`
+- `suspicious_samples_topk.csv`
+- `new_boundary_candidates_topk.csv`
+- `per_dataset_candidate_summary.csv`
+- `stable_side_boundary_candidates_topk.csv`
+- `unstable_side_boundary_candidates_topk.csv`
+- `central_ambiguous_boundary_candidates_topk.csv`
+- `plots/36/*.png`
+- `plots/37/*.png`
+- `plots/74/*.png`
+- `report.html`
+- `report.md`
+- `errors.csv`
+
+## 运行
 
 ```bash
 python boundary_scan_tool/boundary_scan.py --input_dir npy_jobs --output_dir results/boundary_scan
 ```
 
-也可以指定配置文件：
-
-```bash
-python boundary_scan_tool/boundary_scan.py \
-  --input_dir npy_jobs \
-  --output_dir results/boundary_scan \
-  --config boundary_scan_tool/config.yaml
-```
-
-如果你只想快速验证流程，可以限制扫描数量：
+快速 smoke test：
 
 ```bash
 python boundary_scan_tool/boundary_scan.py --input_dir npy_jobs --output_dir results/boundary_scan --max_files 50
 ```
 
-## 输出内容
+## 推荐工作流
 
-每次重新运行时，脚本都会先清空当前输出目录中的旧结果，再写入本次新的 CSV、图和报告。
-
-运行后会在输出目录下生成：
-
-- `all_samples_boundary_scores.csv`
-  所有样本的特征、边界分数和侧边界标记总表
-- `suspicious_samples_topk.csv`
-  Top-K 最可疑样本索引表，会自动排除明显失稳样本
-- `plots/<dataset_name>/...png`
-  Top-K 可疑样本的电压/功角曲线图
-- `report.html`
-  可直接打开浏览的可疑样本报告
-- `errors.csv`
-  扫描或绘图失败的样本记录
-
-## 当前工作流
-
-1. 运行脚本扫描所有样本并提取特征。
-2. 查看 `report.html`，快速浏览 Top-K 可疑样本。
-3. 重点查看稳定侧边界和失稳侧边界分组。
-4. 结合图和关键指标，人工识别值得进一步标注或建模的临界工况。
-
-## 新增的侧边界识别逻辑
-
-### 稳定侧边界
-
-稳定标签样本中，如果表现出以下特征，就会被提升为稳定侧边界候选：
-
-- 功角尾段仍持续振荡，但没有明显滑极
-- 电压尾段频繁接近低压危险区
-- 即使电压整体仍较高，只要功角展宽和角速度已经逼近快失稳区，也会被单独识别
-- 功角展宽、角速度、电压恢复特征共同落入中间风险带
-
-### 失稳侧边界
-
-失稳标签样本中，如果表现出以下特征，就会被提升为失稳侧边界候选：
-
-- 已经失稳，但并非完全崩溃
-- 电压没有彻底塌陷，而是处在反复震荡或局部失稳状态
-- 功角和电压指标更像“部分失稳、临界失稳、反复振荡”而不是极端崩溃
-
-## 建议人工查看时重点关注
-
-- 功角后段是否长时间振荡但未滑极
-- 电压后段是否反复接近 `0.85 ~ 0.9 p.u.`
-- 高电压样本里是否已经出现功角快速展宽、角速度升高但尚未掉压
-- 样本是否既不像明显稳定，也不像明显失稳
-- 稳定标签样本里是否存在潜在风险工况
-- 失稳标签样本里是否存在未完全崩溃的边界工况
-- 是否表现为弱阻尼、慢衰减、临界工况
-
-## 边界分数说明
-
-工具默认使用纯特征规则进行打分，不依赖深度学习框架。
-
-当前分数由三部分组成：
-
-1. 原始边界分数：基于电压和功角特征的高斯接近度计算。
-2. 明显稳定/明显失稳惩罚：对两端样本降分，其中明显失稳样本会直接从 Top-K 和报告候选中排除。
-3. 侧边界加权：
-   - 对稳定侧边界，增加“持续振荡但未滑极”的加权
-   - 对高电压快失稳样本，增加“高电压但功角动态已经危险”的加权
-   - 对失稳侧边界，增加“反复震荡但未完全崩溃”的加权
-
-关键参数都在 `config.yaml` 中可调，包括：
-
-- `tail_window_sec`
-- `final_window_sec`
-- `invalid_value`
-- `relative_angle_mode`
-- 原始边界分数的高斯项参数
-- 稳定侧边界阈值与 bonus 权重
-- 高电压快失稳阈值与 bonus 权重
-- 失稳侧边界阈值与 bonus 权重
-
-## 备注
-
-- 当前默认对功角使用“减去每个时刻中位数”的相对化方式。
-- 遇到坏文件时不会让全流程崩掉，失败记录会写入 `errors.csv`。
-- 图中会自动显示关键指标、边界侧别以及 side signal，便于你直接看图判断是否像稳定侧或失稳侧边界工况。
+1. 先运行这个工具，发现新候选。
+2. 先打开 `report.html` 和 `new_boundary_candidates_topk.csv` 对照复查。
+3. 结合图和自动原因摘要，人工确认哪些样本应当并入边界集。
+4. 把新确认的样本合并进 seed CSV。
+5. 再跑下一轮补全。
+6. 等边界集基本补全后，再训练最终边界分类模型。

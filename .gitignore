@@ -6,6 +6,7 @@ __pycache__/
 
 # Local plotting/cache artifacts
 .matplotlib_cache/
+boundary_scan_tool/_mpl_cache/
 
 # Local dataset and job-index artifacts
 npy_jobs/
